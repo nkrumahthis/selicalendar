@@ -1,10 +1,10 @@
 <?php
 $weeks = array();
-$daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+define("WEEKDAYS", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
 
 function drawSelectlist($dayOfWeek)
 {
-    echo ("<td><select name=\"$dayOfWeek\"[] multiple size=15>");
+    echo ('<td><select name="' . $dayOfWeek . '[]" multiple size=15>');
 
     //add am time slots
     for ($h = 7; $h <= 11; $h++) {
@@ -16,7 +16,7 @@ function drawSelectlist($dayOfWeek)
             $timecode = 't' . $h . $minutes . "am";
             $timeoclock = $h . ':' . $minutes . "am";
 
-            echo ('<option value = "t' . $timecode . '">' . $timeoclock . '</option>');
+            echo ('<option value = "' . $timecode . '">' . $timeoclock . '</option>');
         }
     }
     //add midday time slot
@@ -35,7 +35,7 @@ function drawSelectlist($dayOfWeek)
             $timecode = 't' . $h . $minutes . "pm";
             $timeoclock = $h . ':' . $minutes . "pm";
 
-            echo ('<option value = "t' . $timecode . '">' . $timeoclock . '</option>');
+            echo ('<option value = "' . $timecode . '">' . $timeoclock . '</option>');
         }
     }
 
@@ -61,7 +61,7 @@ function drawSelectlist($dayOfWeek)
             <table id="calendar-table">
                 <tr id="weekdays">
                     <th>Day</th>
-                    <?php foreach ($daysOfWeek as $dayOfWeek) echo "<th>$dayOfWeek</th>"; ?>
+                    <?php foreach (WEEKDAYS as $dayOfWeek) echo "<th>$dayOfWeek</th>"; ?>
                 </tr>
                 <tr>
                     <td>
@@ -70,7 +70,7 @@ function drawSelectlist($dayOfWeek)
 
                     <?php
 
-                    foreach ($daysOfWeek as $dayOfWeek) {
+                    foreach (WEEKDAYS as $dayOfWeek) {
                         drawSelectlist($dayOfWeek);
                     }
 

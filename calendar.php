@@ -2,6 +2,8 @@
 
 $thismonth = date('F, Y');
 $daycount = date('t');
+define("WEEKDAYS", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
+define("WHOLEWEEK", ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]);
 
 //getting the number of weeks
 $weekcount = 0;
@@ -22,6 +24,7 @@ for ($i = 1; $i <= $daycount; $i += 7) {
 </head>
 
 <body>
+    <a href="index.php">👈 SETUP FORM</a>
     <div id="main">
         <h1>Office Hours Sign Up</h1>
         <form id="studentform">
@@ -36,15 +39,7 @@ for ($i = 1; $i <= $daycount; $i += 7) {
             <tr id="month">
                 <th colspan="7"> <?php echo $thismonth ?></th>
             </tr>
-            <tr id="weekdays">
-                <th>Sunday</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
-            </tr>
+            <tr id="wholeweek"><?php foreach (WHOLEWEEK as $dayOfWeek) echo "<th>$dayOfWeek</th>" ?></tr>
             <?php
             //get first day of the month
             $first = date('01-m-Y');
@@ -80,8 +75,9 @@ for ($i = 1; $i <= $daycount; $i += 7) {
                 echo $week;
             }
 
-            foreach ($_GET['Monday'] as $selectedOption)
-                echo $selectedOption . "\n";
+            foreach (WEEKDAYS as $dayOfWeek)
+                foreach ($_POST[$dayOfWeek] as $selectedOption)
+                    echo $selectedOption . "\n";
 
 
             ?>
