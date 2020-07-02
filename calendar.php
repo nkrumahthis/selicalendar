@@ -80,6 +80,9 @@ for ($i = 1; $i <= $daycount; $i += 7) {
                 echo $week;
             }
 
+            foreach ($_GET['Monday'] as $selectedOption)
+                echo $selectedOption . "\n";
+
 
             ?>
         </table>
