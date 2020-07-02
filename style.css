@@ -1,0 +1,46 @@
+body {
+  padding: 1%;
+}
+
+#main {
+}
+
+#banner {
+  width: 90%;
+  background-color: lightgreen;
+  margin: auto;
+}
+
+#banner h1 {
+  text-align: center;
+  padding: 5%;
+}
+
+#calendar-table {
+  width: 90%;
+  margin: auto;
+  margin-top: 2%;
+}
+
+#calendar-table th,
+td,
+tr {
+  background-color: lightgray;
+  padding: 3%;
+}
+
+tr#month th {
+  background-color: lightgreen;
+}
+
+div#buttons {
+  text-align: center;
+}
+
+div#main h1 {
+  text-align: center;
+}
+
+form#studentform {
+  text-align: center;
+}
