@@ -6,31 +6,15 @@ function drawSelectlist($dayOfWeek)
 {
     echo ('<td><select name="' . $dayOfWeek . '[]" multiple size=15>');
 
-
-    $index = 0;
-
     //add am time slots
     $hour = 7;
     while ($hour <= 22) {
-        if ($hour < 12) $m = "am";
-        else $m = "pm";
 
-        if ($hour > 12) $h = $hour % 12;
-        else $h = $hour;
-
-        $slotId = "$dayOfWeek" . "[" . $index . "]";
-        $index += 1;
-        $timeoclock = "$h:00$m";
-
-        echo ('<option value = "' . $timeoclock . '">' . $timeoclock . '</option>');
-
-        if ($hour != 22) {
-            $slotId = "$dayOfWeek" . "[" . $index . "]";
-            $index += 1;
-            $timeoclock = "$h:30$m";
-
-            echo ('<option value = "' . $timeoclock . '">' . $timeoclock . '</option>');
-        }
+        $m = ($hour < 12) ? "am" : "pm";
+        $h = ($hour > 12) ?  $hour % 12 : $hour;
+        echo ('<option value = "' . "$h:00$m" . '">' . "$h:00$m" . '</option>');
+        echo ($hour != 22) ? ('<option value = "' . "$h:30$m" . '">' . "$h:30$m" . '</option>'):('');
+        
 
         $hour++;
     }
