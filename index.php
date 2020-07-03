@@ -6,37 +6,33 @@ function drawSelectlist($dayOfWeek)
 {
     echo ('<td><select name="' . $dayOfWeek . '[]" multiple size=15>');
 
+
+    $index = 0;
+
     //add am time slots
-    for ($h = 7; $h <= 11; $h++) {
-        for ($m = 0; $m <= 1; $m++) {
-            $minutes = "";
-            if ($m == 0) $minutes = "00";
-            else $minutes = "30";
+    $hour = 7;
+    while ($hour <= 22) {
+        if ($hour < 12) $m = "am";
+        else $m = "pm";
 
-            $timecode = 't' . $h . $minutes . "am";
-            $timeoclock = $h . ':' . $minutes . "am";
+        if ($hour > 12) $h = $hour % 12;
+        else $h = $hour;
 
-            echo ('<option value = "' . $timecode . '">' . $timeoclock . '</option>');
+        $slotId = "$dayOfWeek" . "[" . $index . "]";
+        $index += 1;
+        $timeoclock = "$h:00$m";
+
+        echo ('<option value = "' . $timeoclock . '">' . $timeoclock . '</option>');
+
+        if ($hour != 22) {
+            $slotId = "$dayOfWeek" . "[" . $index . "]";
+            $index += 1;
+            $timeoclock = "$h:30$m";
+
+            echo ('<option value = "' . $timeoclock . '">' . $timeoclock . '</option>');
         }
-    }
-    //add midday time slot
-    echo ('<option value=t1200pm>12:00pm</option>');
 
-    //add pm time slots
-    for ($h = 1; $h <= 10; $h++) {
-        for ($m = 0; $m <= 1; $m++) {
-            $minutes = "";
-            if ($m == 0) $minutes = "00";
-            else {
-                if ($h == 10) break;
-                $minutes = "30";
-            }
-
-            $timecode = 't' . $h . $minutes . "pm";
-            $timeoclock = $h . ':' . $minutes . "pm";
-
-            echo ('<option value = "' . $timecode . '">' . $timeoclock . '</option>');
-        }
+        $hour++;
     }
 
     echo ("</select></td>");
