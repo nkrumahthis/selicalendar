@@ -1,4 +1,9 @@
 <?php
+/*
+Author: Selinam Seglah
+*/
+
+
 $weeks = array();
 define("WEEKDAYS", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
 
@@ -13,8 +18,8 @@ function drawSelectlist($dayOfWeek)
         $m = ($hour < 12) ? "am" : "pm";
         $h = ($hour > 12) ?  $hour % 12 : $hour;
         echo ('<option value = "' . "$h:00$m" . '">' . "$h:00$m" . '</option>');
-        echo ($hour != 22) ? ('<option value = "' . "$h:30$m" . '">' . "$h:30$m" . '</option>'):('');
-        
+        echo ($hour != 22) ? ('<option value = "' . "$h:30$m" . '">' . "$h:30$m" . '</option>') : ('');
+
 
         $hour++;
     }

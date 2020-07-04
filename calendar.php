@@ -17,21 +17,68 @@ function sendmail($month, $pickedSlot)
         This month of $month, you have set up an appointment at $pickedSlot";
         $headers = "From: webmaster@example.com";
 
-        if (@mail($to, $subject, $txt, $headers)) {
-            return "<p>Email Sent Successfully";
-        } else {
-            return "<p>Error when sending email";
-        }
+        // if (@mail($to, $subject, $txt, $headers)) {
+        //     return "<p>Email Sent Successfully";
+        // } else {
+        //     return "<p>Error when sending email";
+        // }
     } else {
         return "";
     }
 }
+
+function is_slot_picked($day, $slot)
+{
+    $found = false;
+
+    $slots = $_POST['pickedslots'] ?? array();
+    $slots[] = $_POST["slot"] ?? null;
+
+    foreach ($slots as $value) {
+        //slot information is stored in a sentence separated by spaces
+        //for example 3 3:00am John
+
+        $vals = explode(" ", $value);
+
+        //0 is the day, 1 is the time, 2 is the name
+        //but we need only day and time, ie 1 and 0 to check
+
+        if ($vals[0] == $day && $slot == $vals[1]) {
+            $found = true;
+        }
+    }
+    return $found;
+}
+
+function get_picked_slot_info($day, $slot)
+{
+    $slots = $_POST['pickedslots'] ?? array();
+    $slots[] = isset($_POST["slot"]) ? $_POST["slot"] . " " . $_POST["studentname"] : null;
+
+    $thename = "";
+
+    foreach ($slots as $value) {
+        //slot information is stored in a sentence separated by spaces
+        //for example 3 3:00am John
+
+        $vals = explode(" ", $value);
+
+        //0 is the day, 1 is the time, 2 is the name
+        //but we need only day and time, ie 1 and 0 to check
+
+        if ($vals[0] == $day && $slot == $vals[1]) {
+            $thename = $vals[2];
+        }
+    }
+    return $vals[1] . ' ' . $thename;
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     for ($i = 0; $i < $daycount; $i++) {
         if (isset($_POST["day.$i"])) echo $_POST["day.$i"];
     }
 
-    $pickedSlot = $_POST["slots"] ?? '';
+    $pickedSlot = $_POST["slot"] ?? '';
 
     $emailmessage = sendmail($thismonth, $pickedSlot);
 }
@@ -59,7 +106,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <input type="text" id="studentemail" name="studentemail">
             <button type="submit" form="studentform" value="Submit">Submit</button>
             <button type="clear" form="studentform" value="clear">Clear</button>
+
             <p><?php echo $emailmessage ?? '' ?></p>
+
+
             <table id="calendar-table">
                 <tr id="month">
                     <th colspan="7"> <?php echo $thismonth ?></th>
@@ -92,9 +142,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         if (isset($_POST[$aWeekDayName])) {
                             foreach ($_POST[$aWeekDayName] as $slot) {
-                                $radiobutton = '<input type="radio" name="slots" value="' . $slot . '">
-                                    <label for="' . $slot . '">' . $slot . '</label><br>';
-                                $dayentry .= $radiobutton;
+
+                                $val = "$day $slot";
+
+                                $entry = '';
+
+                                if (!is_slot_picked($day, $slot)) {
+                                    $entry = '<input type="radio" name="slot" value="' . $val . '" id=">
+                                    <label for="' . $slot . '">' . $slot . '</label><br/>';
+                                } else {
+                                    $entry = '<label>' . get_picked_slot_info($day, $slot) . '</label><br/>';
+                                }
+
+                                $dayentry .= $entry;
                             }
                         }
                     }
@@ -129,40 +189,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     foreach ($_POST[$wkday] as $y) {
                         echo '<input type="hidden" name="' . $wkday . '[]" value="' . $y . '">';
                     }
+            if (isset($_POST["slot"])) {
+                echo '<input type="hidden" name="pickedslots[]" value="' . $_POST["slot"] . ' ' . $_POST["studentname"] . '">';
+            }
+            if (isset($_POST["pickedslots"]))
+                foreach ($_POST["pickedslots"] as $oldslot)
+                    echo '<input type="hidden" name="pickedslots[]" value="' . $oldslot . '">';
+
             ?>
 
         </form>
     </div>
-
-    <table>
-        <?php
-
-
-        foreach ($_POST as $key => $value) {
-            echo "<tr>";
-            echo "<td>";
-            echo ($key);
-            echo "</td>";
-            echo "<td>";
-            echo '<table style = "border: black solid 2px">';
-            foreach ($value as $k => $v) {
-                echo "<tr>";
-                echo '<td style = "border: black solid 1px">>';
-                echo ($k);
-                echo "</td>";
-                echo '<td style = "border: black solid 1px">>';
-                print_r($v);
-                echo "</td>";
-                echo "</tr>";
-            }
-            echo "</table>";
-            echo "</td>";
-            echo "</tr>";
-        }
-
-
-        ?>
-    </table>
 
 </body>
 
