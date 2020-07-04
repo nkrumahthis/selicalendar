@@ -10,18 +10,18 @@ define("WHOLEWEEK", ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Fr
 function sendmail($month, $pickedSlot)
 {
     if (isset($_POST['studentname']) && isset($_POST['studentemail'])) {
-        $to = $_POST['studentemail'];
+        $to = "sseglah@gmu.edu";
         $subject = "My subject";
         $name = $_POST["studentname"];
         $txt = "Hello $name,
         This month of $month, you have set up an appointment at $pickedSlot";
-        $headers = "From: webmaster@example.com";
+        $headers = "From:" . $_POST['studentemail'];
 
-        // if (@mail($to, $subject, $txt, $headers)) {
-        //     return "<p>Email Sent Successfully";
-        // } else {
-        //     return "<p>Error when sending email";
-        // }
+        if (@mail($to, $subject, $txt, $headers)) {
+            return "<p>Email Sent Successfully";
+        } else {
+            return "<p>Error when sending email";
+        }
     } else {
         return "";
     }
@@ -70,7 +70,7 @@ function get_picked_slot_info($day, $slot)
             $thename = $vals[2];
         }
     }
-    return $vals[1] . ' ' . $thename;
+    return $vals[1] . ' -- ' . $thename;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -96,21 +96,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-    <a href="index.php">👈 SETUP FORM</a>
+
+
+    <a class="navbutton" href="index.php">👈 SETUP FORM</a>
+
+
     <div id="main">
-        <h1>Office Hours Sign Up</h1>
+
+
+        <h1>OFFICE HOURS SIGN UP</h1>
+
         <form id="studentform" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
             <label for="studentname">Student name:</label>
             <input type="text" id="studentname" name="studentname">
             <label for="studentname">Student email:</label>
             <input type="text" id="studentemail" name="studentemail">
-            <button type="submit" form="studentform" value="Submit">Submit</button>
-            <button type="clear" form="studentform" value="clear">Clear</button>
+
+            <button type="clear" form="studentform" value="clear" class="secondary">Clear</button>
+            <button type="submit" form="studentform" value="Submit" class="primary">Submit</button>
 
             <p><?php echo $emailmessage ?? '' ?></p>
 
 
-            <table id="calendar-table">
+            <table class="calendar-table">
                 <tr id="month">
                     <th colspan="7"> <?php echo $thismonth ?></th>
                 </tr>
@@ -133,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     $dayOfWeek = $weekday % 7;
 
-                    $dayentry = '<p>' . $day . '</p>';
+                    $dayentry = '<p class="day">' . $day . '</p>';
 
                     $aWeekDay = $dayOfWeek - 1;
 
@@ -149,9 +157,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                 if (!is_slot_picked($day, $slot)) {
                                     $entry = '<input type="radio" name="slot" value="' . $val . '" id=">
-                                    <label for="' . $slot . '">' . $slot . '</label><br/>';
+                                    <label for="' . $slot . '" >' . $slot . '</label><br/>';
                                 } else {
-                                    $entry = '<label>' . get_picked_slot_info($day, $slot) . '</label><br/>';
+                                    $entry = '<label >' . get_picked_slot_info($day, $slot) . '</label><br/>';
                                 }
 
                                 $dayentry .= $entry;
@@ -199,6 +207,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             ?>
 
         </form>
+    </div>
+    <div class="project-info">
+        <strong>IT 207-B03, Summer 2020
+            <br> George Mason University</strong>
+        <br>
+        <br><strong>Instructor: </strong>Erhan Uyar
+        <br><strong>Student: </strong>Selinam Seglah
+        <a href="mailto:sseglah@gmu.edu"> sseglah@gmu.edu </a>
+        <br />
+    </div>
+    <div class="lastmodified">
+        <br />
+        <?php
+        date_default_timezone_set('EST');
+        echo "<strong>Last Modified: </strong>"
+            . date("H:i F d, Y", getlastmod()), "EST";
+        ?>
     </div>
 
 </body>

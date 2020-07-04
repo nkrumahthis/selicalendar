@@ -43,14 +43,14 @@ function drawSelectlist($dayOfWeek)
     <div id="main">
         <h1>Office Hours Setup Form</h1>
         <form method='post' id='thisform' action="calendar.php">
-            <table id="calendar-table">
+            <table class="calendar-table">
                 <tr id="weekdays">
                     <th>Day</th>
                     <?php foreach (WEEKDAYS as $dayOfWeek) echo "<th>$dayOfWeek</th>"; ?>
                 </tr>
                 <tr>
-                    <td>
-                        Day:
+                    <td class="row-title">
+                        Time:
                     </td>
 
                     <?php
@@ -64,9 +64,9 @@ function drawSelectlist($dayOfWeek)
 
 
             </table>
-            <div id="buttons">
-                <button type="clear" form="thisform" value="Clear">Clear</button>
-                <button type="submit" form="thisform" value="Submit">Submit</button>
+            <div class="buttons">
+                <button type="clear" form="thisform" value="Clear" class="secondary">Clear</button>
+                <button type="submit" form="thisform" value="Submit" class="primary">Submit</button>
             </div>
         </form>
     </div>
