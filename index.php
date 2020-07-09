@@ -5,7 +5,7 @@ Author: Selinam Seglah
 
 
 $weeks = array();
-define("WEEKDAYS", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
+const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 function drawSelectlist($dayOfWeek)
 {

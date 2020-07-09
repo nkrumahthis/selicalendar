@@ -2,8 +2,8 @@
 
 $thismonth = date('F, Y');
 $daycount = date('t');
-define("WEEKDAYS", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]);
-define("WHOLEWEEK", ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]);
+const WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const WHOLEWEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 
 //try to send mail
@@ -31,8 +31,13 @@ function is_slot_picked($day, $slot)
 {
     $found = false;
 
-    $slots = $_POST['pickedslots'] ?? array();
-    $slots[] = $_POST["slot"] ?? null;
+    if (isset($_POST['pickedslots']))
+        $slots = $_POST['pickedslots'];
+    else $slots = array();
+
+    if (isset($_POST["slot"]))
+        $slots[] = $_POST["slot"];
+    else $slots[] = null;
 
     foreach ($slots as $value) {
         //slot information is stored in a sentence separated by spaces
@@ -52,7 +57,10 @@ function is_slot_picked($day, $slot)
 
 function get_picked_slot_info($day, $slot)
 {
-    $slots = $_POST['pickedslots'] ?? array();
+    if (isset($_POST['pickedslots']))
+        $slots = $_POST['pickedslots'];
+    else $slots = array();
+
     $slots[] = isset($_POST["slot"]) ? $_POST["slot"] . " " . $_POST["studentname"] : null;
 
     $thename = "";
@@ -78,7 +86,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (isset($_POST["day.$i"])) echo $_POST["day.$i"];
     }
 
-    $pickedSlot = $_POST["slot"] ?? '';
+    if (isset($_POST["slot"]))
+        $pickedSlot = $_POST["slot"];
+    else $pickedSlot = '';
 
     $emailmessage = sendmail($thismonth, $pickedSlot);
 }
@@ -115,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <button type="clear" form="studentform" value="clear" class="secondary">Clear</button>
             <button type="submit" form="studentform" value="Submit" class="primary">Submit</button>
 
-            <p><?php echo $emailmessage ?? '' ?></p>
+            <p><?php echo $emailmessage; ?></p>
 
 
             <table class="calendar-table">
